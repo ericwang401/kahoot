@@ -14,5 +14,5 @@ model Users {
   id        Int      @id @default(autoincrement())
   email     String   @unique
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime? @updatedAt
 }
