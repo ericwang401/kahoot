@@ -23,3 +23,11 @@ model Questions {
   createdAt DateTime @default(now())
   updatedAt DateTime? @updatedAt
 }
+
+model Teams {
+  id        Int      @id @default(autoincrement())
+  name      String
+  score     Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime? @updatedAt
+}
