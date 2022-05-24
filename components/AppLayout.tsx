@@ -33,6 +33,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
   const navigation = [
     { name: 'Dashboard', href: '/', icon: HomeIcon },
     { name: 'Questions', href: '/questions', icon: QuestionMarkCircleIcon },
+    { name: 'Teams', href: '/teams', icon: UsersIcon },
   ]
 
   // get navigation element by href

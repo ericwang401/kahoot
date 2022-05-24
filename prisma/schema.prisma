@@ -3,6 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  output   = "./client"
 }
 
 datasource db {
@@ -27,7 +28,7 @@ model Questions {
 model Teams {
   id        Int      @id @default(autoincrement())
   name      String
-  score     Int
+  score     Int      @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime? @updatedAt
 }
