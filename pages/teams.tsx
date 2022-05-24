@@ -36,6 +36,12 @@ const Teams: NextPage<QuestionsProps> = ({ teams }) => {
                     scope="col"
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                   >
+                    Unique ID
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
                     Name
                   </th>
                   <th
@@ -52,6 +58,7 @@ const Teams: NextPage<QuestionsProps> = ({ teams }) => {
               <tbody>
                 {teams.map((team, teamIdx) => (
                   <tr key={team.id} className={teamIdx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{team.id}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{team.name}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{team.score}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">

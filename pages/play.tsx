@@ -2,8 +2,7 @@ import StartGame from '@components/StartGame'
 import type { NextPage } from 'next'
 import prisma from '@util/prisma'
 import { useEffect, useState } from 'react';
-import io from 'socket.io-client'
-let socket
+import GameContainer from '@components/GameContainer';
 
 interface PlayProps {
     questions: {
@@ -18,29 +17,13 @@ interface PlayProps {
 }
 
 const Play: NextPage<PlayProps> = ({ questions, teams }) => {
-    const [showStartGame, setShowStartGame] = useState(true)
-
-    const socketInitializer = async () => {
-        await fetch('/api/verifySocketIsRunning')
-        socket = io()
-
-        socket.on('connect', () => {
-            console.log('connected')
-        })
-
-        socket.on('test', (msg: string) => {
-            console.log(msg, 'e')
-        })
-    }
-
-    useEffect(() => {
-        console.log('wow')
-        socketInitializer()
-    }, [])
+    const [playing, setPlaying] = useState(false)
 
     return <div className="max-w-7xl h-full mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl h-full mx-auto">
-            {showStartGame && <StartGame onClick={() => setShowStartGame(false)} questions={questions} teams={teams} />}
+            {!playing && <StartGame onClick={() => setPlaying(true)} questions={questions} teams={teams} />}
+
+            {playing && <GameContainer questions={questions} teams={teams} />}
         </div>
     </div>
 }
