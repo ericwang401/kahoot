@@ -1,6 +1,7 @@
 /* This example requires Tailwind CSS v2.0+ */
 import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
+import { useRouter } from "next/router";
 import {
   CalendarIcon,
   ChartBarIcon,
@@ -11,14 +12,11 @@ import {
   UsersIcon,
   XIcon,
 } from '@heroicons/react/outline'
+import Link from 'next/link'
 
 const navigation = [
-  { name: 'Dashboard', href: '#', icon: HomeIcon, current: true },
-  { name: 'Team', href: '#', icon: UsersIcon, current: false },
-  { name: 'Projects', href: '#', icon: FolderIcon, current: false },
-  { name: 'Calendar', href: '#', icon: CalendarIcon, current: false },
-  { name: 'Documents', href: '#', icon: InboxIcon, current: false },
-  { name: 'Reports', href: '#', icon: ChartBarIcon, current: false },
+  { name: 'Dashboard', href: '/', icon: HomeIcon },
+  { name: 'Team', href: '/questions', icon: UsersIcon },
 ]
 
 function classNames(...classes: string[]) {
@@ -26,11 +24,12 @@ function classNames(...classes: string[]) {
 }
 
 interface AppLayoutProps {
-    children: React.ReactNode
+  children: React.ReactNode
 }
 
 const AppLayout = ({ children }: AppLayoutProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const router = useRouter()
 
   return (
     <>
@@ -96,23 +95,25 @@ const AppLayout = ({ children }: AppLayoutProps) => {
                   </div>
                   <nav className="mt-5 px-2 space-y-1">
                     {navigation.map((item) => (
-                      <a
+                      <Link
                         key={item.name}
-                        href={item.href}
-                        className={classNames(
-                          item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                          'group flex items-center px-2 py-2 text-base font-medium rounded-md'
-                        )}
-                      >
-                        <item.icon
+                        href={item.href}>
+                        <a
                           className={classNames(
-                            item.current ? 'text-gray-300' : 'text-gray-400 group-hover:text-gray-300',
-                            'mr-4 flex-shrink-0 h-6 w-6'
+                            router.pathname === item.href ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                            'group flex items-center px-2 py-2 text-base font-medium rounded-md'
                           )}
-                          aria-hidden="true"
-                        />
-                        {item.name}
-                      </a>
+                        >
+                          <item.icon
+                            className={classNames(
+                              router.pathname === item.href ? 'text-gray-300' : 'text-gray-400 group-hover:text-gray-300',
+                              'mr-4 flex-shrink-0 h-6 w-6'
+                            )}
+                            aria-hidden="true"
+                          />
+                          {item.name}
+                        </a>
+                      </Link>
                     ))}
                   </nav>
                 </div>
@@ -153,23 +154,25 @@ const AppLayout = ({ children }: AppLayoutProps) => {
               </div>
               <nav className="mt-5 flex-1 px-2 space-y-1">
                 {navigation.map((item) => (
-                  <a
+                  <Link
                     key={item.name}
-                    href={item.href}
-                    className={classNames(
-                      item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                      'group flex items-center px-2 py-2 text-sm font-medium rounded-md'
-                    )}
-                  >
-                    <item.icon
+                    href={item.href}>
+                    <a
                       className={classNames(
-                        item.current ? 'text-gray-300' : 'text-gray-400 group-hover:text-gray-300',
-                        'mr-3 flex-shrink-0 h-6 w-6'
+                        router.pathname === item.href ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                        'group flex items-center px-2 py-2 text-sm font-medium rounded-md'
                       )}
-                      aria-hidden="true"
-                    />
-                    {item.name}
-                  </a>
+                    >
+                      <item.icon
+                        className={classNames(
+                          router.pathname === item.href ? 'text-gray-300' : 'text-gray-400 group-hover:text-gray-300',
+                          'mr-3 flex-shrink-0 h-6 w-6'
+                        )}
+                        aria-hidden="true"
+                      />
+                      {item.name}
+                    </a>
+                  </Link>
                 ))}
               </nav>
             </div>
@@ -209,7 +212,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
                 <h1 className="text-2xl font-semibold text-gray-900">Dashboard</h1>
               </div>
               <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-                { children }
+                {children}
               </div>
             </div>
           </main>
