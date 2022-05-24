@@ -6,6 +6,7 @@ import { Prisma, Questions } from '@prisma/client';
 import CreateQuestion from '@components/CreateQuestion';
 import axios from 'axios';
 import { useRefreshProps } from '@util/routerUtil';
+import UpdateQuestion from '@components/UpdateQuestion';
 
 interface QuestionsProps {
   questions: {
@@ -50,9 +51,7 @@ const Questions: NextPage<QuestionsProps> = ({ questions }) => {
                   <tr key={person.id} className={personIdx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{person.content}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <a href="#" className="text-indigo-600 hover:text-indigo-900">
-                        Edit
-                      </a>
+                      <UpdateQuestion id={person.id} content={person.content} />
                       <button onClick={() => deleteQuestion(person.id)} className="ml-1 text-red-600 hover:text-indigo-900">
                         Delete
                       </button>
