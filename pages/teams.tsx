@@ -6,6 +6,7 @@ import CreateTeam from '@components/CreateTeam';
 import axios from 'axios';
 import { useRefreshProps } from '@util/routerUtil';
 import { Teams } from 'prisma/client';
+import UpdateTeam from '@components/UpdateTeam';
 
 interface QuestionsProps {
   teams: Teams[]
@@ -37,6 +38,12 @@ const Teams: NextPage<QuestionsProps> = ({ teams }) => {
                   >
                     Name
                   </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Score
+                  </th>
                   <th scope="col" className="relative px-6 py-3">
                     <span className="sr-only">Actions</span>
                   </th>
@@ -46,7 +53,9 @@ const Teams: NextPage<QuestionsProps> = ({ teams }) => {
                 {teams.map((team, teamIdx) => (
                   <tr key={team.id} className={teamIdx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{team.name}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{team.score}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <UpdateTeam id={team.id} name={team.name} />
                       <button onClick={() => deleteQuestion(team.id)} className="ml-1 text-red-600 hover:text-indigo-900">
                         Delete
                       </button>
