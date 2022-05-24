@@ -9,3 +9,7 @@ html, body {
 html {
   @apply bg-gray-100
 }
+
+#__next, body {
+  @apply h-full
+}

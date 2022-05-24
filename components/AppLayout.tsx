@@ -7,6 +7,7 @@ import {
   HomeIcon,
   MenuIcon,
   UsersIcon,
+  PlayIcon,
   XIcon,
 } from '@heroicons/react/outline'
 import Link from 'next/link'
@@ -34,6 +35,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
     { name: 'Dashboard', href: '/', icon: HomeIcon },
     { name: 'Questions', href: '/questions', icon: QuestionMarkCircleIcon },
     { name: 'Teams', href: '/teams', icon: UsersIcon },
+    { name: 'Play', href: '/play', icon: PlayIcon },
   ]
 
   // get navigation element by href
