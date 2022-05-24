@@ -16,9 +16,6 @@ const Home: NextPage = () => {
   </AppLayout>
 }
 
-// @ts-ignore
-Home.getLayout = (page: ReactNode) => <AppLayout>{page}</AppLayout>
-
 export const getServerSideProps = authorizeRequest(async (ctx: NextPageContext) => {
   return {
     props: {

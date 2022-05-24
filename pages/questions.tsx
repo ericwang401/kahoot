@@ -1,13 +1,19 @@
 import { NextPage } from 'next';
 import AppLayout from '@components/AppLayout';
+import authorizeRequest from '@middlewares/authorizeRequest'
 
 const Questions: NextPage = () => {
     return <AppLayout>
-        <h1>wow</h1>
+        <></>
     </AppLayout>
 }
 
-// @ts-ignore
-Questions.getLayout = (page: ReactNode) => <AppLayout>{page}</AppLayout>
+export const getServerSideProps = authorizeRequest(async () => {
+    return {
+      props: {
+      }
+    }
+  })
+
 
 export default Questions
