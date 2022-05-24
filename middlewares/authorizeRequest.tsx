@@ -1,9 +1,7 @@
 import { NextPageContext } from 'next'
 import { getSession } from '@auth0/nextjs-auth0'
-import { PrismaClient } from '@prisma/client'
+import prisma from '@util/prisma'
 import { NextApiRequest, NextApiResponse } from 'next'
-
-const prisma = new PrismaClient()
 
 const authorizeRequest = (handler: Function) => {
     return async ({ req, res }: { req: NextApiRequest, res: NextApiResponse}) => {
