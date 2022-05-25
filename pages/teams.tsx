@@ -5,7 +5,7 @@ import prisma from '@util/prisma';
 import CreateTeam from '@components/CreateTeam';
 import axios from 'axios';
 import { useRefreshProps } from '@util/routerUtil';
-import { Teams } from 'prisma/client';
+import { Teams } from '@prisma/client';
 import UpdateTeam from '@components/UpdateTeam';
 
 interface QuestionsProps {
