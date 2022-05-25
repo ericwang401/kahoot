@@ -12,7 +12,6 @@ interface PlayProps {
     teams: {
         id: number;
         name: string;
-        score: number;
     }[]
 }
 
@@ -40,8 +39,7 @@ export const getServerSideProps = async () => {
             teams: await prisma.teams.findMany({
                 select: {
                     id: true,
-                    name: true,
-                    score: true
+                    name: true
                 }
             })
         }

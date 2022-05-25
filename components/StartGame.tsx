@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 interface StartGameProps {
     questions: {
         id: number;
@@ -6,7 +8,6 @@ interface StartGameProps {
     teams: {
         id: number;
         name: string;
-        score: number;
     }[]
     onClick: () => void
 }
@@ -17,6 +18,13 @@ const StartGame = ({ questions, teams, onClick }: StartGameProps) => {
         { name: 'Questions', stat: questions.length },
         { name: 'Teams', stat: teams.length },
     ]
+
+    const resetAllPoints = async () => {
+        await axios.post('/api/game/team/reset')
+
+        alert('All points have been reset')
+    }
+
     return <div className='grid place-items-center h-full'>
         <div>
             <img className='mx-auto' src="https://imgur.com/bw1McHh.png" alt="logo" />
@@ -35,13 +43,23 @@ const StartGame = ({ questions, teams, onClick }: StartGameProps) => {
                 <p className="mt-4">
                     This will be the <span className='font-bold'>HARDEST</span> trivia game you&apos;ve ever played. Are you ready?
                 </p>
-                <button
-                    type="button"
-                    className="mt-4 w-full justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:w-auto sm:text-sm"
-                    onClick={onClick}
-                >
-                    ok
-                </button>
+                <div className="flex space-x-2 mt-4">
+
+                    <button
+                        type="button"
+                        className="w-full justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:w-auto sm:text-sm"
+                        onClick={onClick}
+                    >
+                        ok
+                    </button>
+                    <button
+                        type="button"
+                        className="w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm"
+                        onClick={resetAllPoints}
+                    >
+                        Reset all points
+                    </button>
+                </div>
             </div>
         </div>
     </div>
