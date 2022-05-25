@@ -2,7 +2,7 @@ import { NextPage } from 'next';
 import AppLayout from '@components/AppLayout';
 import authorizeRequest from '@middlewares/authorizeRequest'
 import prisma from '@util/prisma';
-import { Questions } from '@prisma/client';
+import { Prisma, Questions } from '@prisma/client';
 import CreateQuestion from '@components/CreateQuestion';
 import axios from 'axios';
 import { useRefreshProps } from '@util/routerUtil';
