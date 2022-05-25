@@ -40,10 +40,17 @@ const GameContainer = ({ questions, teams }: GameContainerProps) => {
         })
 
         socket.on('select-team', (id: number) => {
-            setSelectedTeamId(oldId => {
-                if (oldId) return oldId;
+            setShowLeaderboard(oldCompleted => {
+                if (oldCompleted) return oldCompleted;
 
-                return id
+
+                setSelectedTeamId(oldId => {
+                    if (oldId) return oldId;
+
+                    return id
+                })
+
+                return oldCompleted
             })
         })
     }
