@@ -108,7 +108,9 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
         }
     }
 
-    const denyPoints = () => {
+    const denyPoints = async () => {
+        const deniedTeam = teamsThatBuzzed.find(teamId => teamId == selectedTeamId)
+        await axios.post(`/api/game/team/subtract/${deniedTeam}`)
         // find team that buzzed by team id and get index
         const teamIndex = teamsThatBuzzed.findIndex(teamId => teamId == selectedTeamId)
         const nextTeam = teamsThatBuzzed[teamIndex + 1]

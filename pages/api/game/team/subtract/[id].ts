@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import prisma from '@util/prisma'
 import withAuthorized from '@middlewares/withAuthorized'
 
-const add = async (req: NextApiRequest, res: NextApiResponse) => {
+const subtract = async (req: NextApiRequest, res: NextApiResponse) => {
   let team = await prisma.teams.findUnique({
     where: {
       id: parseInt(req.query.id as string),
@@ -15,12 +15,19 @@ const add = async (req: NextApiRequest, res: NextApiResponse) => {
     return
   }
 
+  if (team.score === 0) {
+    res.status(200).json({
+      message: 'Team score is already 0',
+    })
+    return
+  }
+
   await prisma.teams.update({
     where: {
       id: parseInt(req.query.id as string),
     },
     data: {
-      score: team.score + 2,
+      score: team.score - 1,
     },
   })
 
@@ -29,7 +36,7 @@ const add = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const post = {
   method: 'POST' as const,
-  handler: add,
+  handler: subtract,
 }
 
 export default withAuthorized(withProperMethods([post]))
