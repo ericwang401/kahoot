@@ -80,6 +80,7 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
 
         setShowLeaderboard(true)
         setSelectedTeamId(null)
+        setTeamsThatBuzzed([])
 
         if (selectedQuestion + 1 < questions.length) {
             setSelectedQuestion(question => question + 1)
@@ -89,13 +90,29 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
     }
 
     const skip = () => {
+        setShowLeaderboard(true)
         setSelectedTeamId(null)
+        setTeamsThatBuzzed([])
+
         if (selectedQuestion + 1 < questions.length) {
             setSelectedQuestion(question => question + 1)
         } else {
             setShowLeaderboard(true)
             setCompleted(true)
         }
+    }
+
+    const denyPoints = () => {
+        // find team that buzzed by team id and get index
+        const teamIndex = teamsThatBuzzed.findIndex(teamId => teamId == selectedTeamId)
+        const nextTeam = teamsThatBuzzed[teamIndex + 1]
+
+        teamsThatBuzzed.shift()
+        if (nextTeam) {
+            setSelectedTeamId(nextTeam)
+            return
+        }
+        setSelectedTeamId(null)
     }
 
     useEffect(() => {
@@ -180,7 +197,7 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
                             <button
                                 type="button"
                                 className="w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm"
-                                onClick={() => setSelectedTeamId(null)}
+                                onClick={denyPoints}
                             >
                                 Deny points
                             </button>

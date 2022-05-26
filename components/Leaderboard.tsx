@@ -34,7 +34,7 @@ const Leaderboard = ({ show, onClick, completed }: LeaderboardProps) => {
                     {teams && teams.map((team, index) => (
                         <li key={team.id} className="px-6 py-4">
                             <div className="flex justify-between">
-                                <p>{index + 1}. <span className='font-bold'>{team.name}</span></p> <p>{team.score}</p>
+                                <p className='text-xl'>{index + 1}. <span className='font-bold'>{team.name}</span></p> <p>{team.score}</p>
                             </div>
                         </li>
                     ))}

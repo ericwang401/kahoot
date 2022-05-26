@@ -3,6 +3,7 @@ import type { NextPage } from 'next'
 import prisma from '@util/prisma'
 import { useEffect, useState } from 'react';
 import GameContainer from '@components/GameContainer';
+import authorizeRequest from '@middlewares/authorizeRequest';
 
 interface PlayProps {
     questions: {
@@ -17,7 +18,7 @@ interface PlayProps {
 
 const Play: NextPage<PlayProps> = ({ questions, teams }) => {
     const [playing, setPlaying] = useState(false)
-    const [answerTimeout, setAnswerTimeout] = useState(5)
+    const [answerTimeout, setAnswerTimeout] = useState(15)
 
     return <div className="max-w-7xl h-full mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl h-full mx-auto">
@@ -28,7 +29,7 @@ const Play: NextPage<PlayProps> = ({ questions, teams }) => {
     </div>
 }
 
-export const getServerSideProps = async () => {
+export const getServerSideProps = authorizeRequest(async () => {
     return {
         props: {
             questions: await prisma.questions.findMany({
@@ -45,6 +46,6 @@ export const getServerSideProps = async () => {
             })
         }
     }
-}
+})
 
 export default Play
