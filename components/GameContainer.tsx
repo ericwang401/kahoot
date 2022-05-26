@@ -26,6 +26,8 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
     const [connected, setConnected] = useState(false)
     const [selectedQuestion, setSelectedQuestion] = useState<number>(0)
     const [selectedTeamId, setSelectedTeamId] = useState<number | null>(null)
+    const [teamsThatBuzzed, setTeamsThatBuzzed] = useState<number[]>([])
+
     const [isAcceptingAnswers, setIsAcceptingAnswers] = useState(true)
     const timeoutRef = useRef<NodeJS.Timeout>()
 
@@ -57,6 +59,12 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
                         if (oldId) return oldId;
 
                         return id
+                    })
+
+                    setTeamsThatBuzzed(oldTeamsThatBuzzed => {
+                        if (oldTeamsThatBuzzed.includes(id)) return oldTeamsThatBuzzed;
+
+                        return [...oldTeamsThatBuzzed, id]
                     })
 
                     return isAccepting
@@ -95,7 +103,6 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
 
         timeoutRef.current = setTimeout(() => {
             setIsAcceptingAnswers(false)
-            console.log('no answers')
         }, timeoutValue * 1000)
 
         controls.set({
@@ -109,8 +116,6 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
             }
         })
 
-        console.log('ran')
-
         return () => clearInterval(timeoutRef.current)
     }, [selectedQuestion, showLeaderboard])
 
@@ -119,7 +124,7 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
     }, [])
 
     return <div className='grid place-items-center h-full'>
-        <div className='w-full'>
+        <div className='w-full relative'>
             {connected &&
                 <div className="rounded-md bg-green-50 p-4">
                     <div className="flex">
@@ -198,6 +203,12 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
                         Skip
                     </button>
                 </div>
+
+                {!showLeaderboard && <div className='absolute w-full grid grid-cols-3 gap-5'>
+                        { teamsThatBuzzed.map((team, index) => <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className='shadow mt-5 sm:rounded-md sm:overflow-hidden bg-white px-4 py-5 sm:p-6' key={team}>
+                            <p>{index + 1}. { teams.find(oneTeam => oneTeam.id == team )?.name }</p>
+                        </motion.div>) }
+                </div>}
 
             </>}
         </div>
