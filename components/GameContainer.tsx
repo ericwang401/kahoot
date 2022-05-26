@@ -5,6 +5,7 @@ import classNames from '@util/classNames'
 import Leaderboard from '@components/Leaderboard'
 import axios from 'axios'
 import { motion, useAnimation } from 'framer-motion'
+import { emitWarning } from 'process'
 
 interface GameContainerProps {
     questions: {
@@ -56,12 +57,17 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
                     if (!isAccepting) return isAccepting;
 
                     setSelectedTeamId(oldId => {
+                        const check = teams.find(team => team.id == id)
+                        if (!check) return oldId;
                         if (oldId) return oldId;
 
                         return id
                     })
 
                     setTeamsThatBuzzed(oldTeamsThatBuzzed => {
+                        const check = teams.find(team => team.id == id)
+                        if (!check) return oldTeamsThatBuzzed;
+
                         if (oldTeamsThatBuzzed.includes(id)) return oldTeamsThatBuzzed;
 
                         return [...oldTeamsThatBuzzed, id]
@@ -120,6 +126,10 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
 
         timeoutRef.current = setTimeout(() => {
             setIsAcceptingAnswers(false)
+            console.log('no longer accepting answers')
+            controls.set({
+                width: 0
+            })
         }, timeoutValue * 1000)
 
         controls.set({
