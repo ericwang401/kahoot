@@ -4,6 +4,8 @@ services:
       context: .
       dockerfile: ./Production
     restart: unless-stopped
+    depends_on:
+      - db
     ports:
       - 80:80
   db:
