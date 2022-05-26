@@ -28,7 +28,7 @@ const Leaderboard = ({ show, onClick, completed }: LeaderboardProps) => {
             height={height}
         />}
         {(show || completed) && <>
-            <h1 className='text-4xl mt-4 font-bold text-center'>{completed ? 'CONGRATS!!!' : 'SHEEESH DOING GOOD!1'}</h1>
+            <h1 className='text-4xl mt-4 font-bold text-center'>{completed ? 'CONGRATS!!!' : 'SHEEESH DOING GOOD!'}</h1>
             <div className="bg-white border mt-4 border-gray-300 overflow-hidden rounded-md">
                 <ul role="list" className="divide-y divide-gray-300">
                     {teams && teams.map((team, index) => (
