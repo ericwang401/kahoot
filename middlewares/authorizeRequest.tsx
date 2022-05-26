@@ -1,10 +1,9 @@
-import { NextPageContext } from 'next'
+import { GetServerSidePropsContext } from 'next'
 import { getSession } from '@auth0/nextjs-auth0'
 import prisma from '@util/prisma'
-import { NextApiRequest, NextApiResponse } from 'next'
 
 const authorizeRequest = (handler: Function) => {
-    return async ({ req, res }: { req: NextApiRequest, res: NextApiResponse}) => {
+    return async ({ req, res }: GetServerSidePropsContext) => {
         const session = getSession(req, res)
 
         if (!session) {

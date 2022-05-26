@@ -17,12 +17,13 @@ interface PlayProps {
 
 const Play: NextPage<PlayProps> = ({ questions, teams }) => {
     const [playing, setPlaying] = useState(false)
+    const [answerTimeout, setAnswerTimeout] = useState(5)
 
     return <div className="max-w-7xl h-full mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl h-full mx-auto">
-            {!playing && <StartGame onClick={() => setPlaying(true)} questions={questions} teams={teams} />}
+            {!playing && <StartGame timeoutValue={answerTimeout} onChange={setAnswerTimeout} onClick={() => setPlaying(true)} questions={questions} teams={teams} />}
 
-            {playing && <GameContainer questions={questions} teams={teams} />}
+            {playing && <GameContainer timeoutValue={answerTimeout} questions={questions} teams={teams} />}
         </div>
     </div>
 }
