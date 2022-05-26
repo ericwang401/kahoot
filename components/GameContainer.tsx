@@ -231,8 +231,8 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
                     </button>
                 </div>
 
-                {!showLeaderboard && <div className='absolute w-full grid grid-cols-3 gap-5'>
-                        { teamsThatBuzzed.map((team, index) => <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className='shadow mt-5 sm:rounded-md sm:overflow-hidden bg-white px-4 py-5 sm:p-6' key={team}>
+                {!showLeaderboard && <div className='absolute w-full mt-5 grid grid-cols-3 gap-5'>
+                        { teamsThatBuzzed.map((team, index) => <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className='shadow sm:rounded-md sm:overflow-hidden bg-white px-4 py-5 sm:p-6' key={team}>
                             <p>{index + 1}. { teams.find(oneTeam => oneTeam.id == team )?.name }</p>
                         </motion.div>) }
                 </div>}
