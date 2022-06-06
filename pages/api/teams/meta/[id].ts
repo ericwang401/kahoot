@@ -5,10 +5,12 @@ import prisma from '@util/prisma'
 const get = {
   method: 'GET' as const,
   handler: async (req: NextApiRequest, res: NextApiResponse) => {
-    await prisma.teams.findUnique({
-      where: {
-        id: parseInt(req.query.id as string),
-      }
+    res.status(200).json({
+      team: await prisma.teams.findUnique({
+        where: {
+          id: parseInt(req.query.id as string),
+        }
+      })
     })
   }
 }
