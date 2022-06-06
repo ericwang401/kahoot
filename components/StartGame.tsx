@@ -24,7 +24,7 @@ const StartGame = ({ questions, teams, onClick, onChange, timeoutValue }: StartG
     ]
 
     const resetAllPoints = async () => {
-        await axios.post('/api/game/team/reset')
+        await axios.post('/api/actions/team/reset')
 
         alert('All points have been reset')
     }

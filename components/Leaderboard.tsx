@@ -14,7 +14,7 @@ const Leaderboard = ({ show, onClick, completed }: LeaderboardProps) => {
 
     useEffect(() => {
         const fetchTeams = async () => {
-            const fetchedTeams = await (await fetch('/api/game/leaderboard')).json()
+            const fetchedTeams = await (await fetch('/api/teams/leaderboard')).json()
             const parsed = Object.values(fetchedTeams.teams) as { id: number; name: string; score: number }[]
             setTeams(parsed)
         }
