@@ -6,7 +6,7 @@ import withAuthorized from '@middlewares/withAuthorized'
 const reset = async (req: NextApiRequest, res: NextApiResponse) => {
   await prisma.teams.updateMany({
     data: {
-      score: 0,
+      score: 100,
     },
   })
 

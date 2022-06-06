@@ -9,7 +9,7 @@ const get = {
     await prisma.teams.create({
       data: {
         name: req.body.name,
-        score: 0,
+        score: 100,
       },
     })
 

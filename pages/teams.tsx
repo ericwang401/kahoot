@@ -7,6 +7,7 @@ import axios from 'axios';
 import { useRefreshProps } from '@util/routerUtil';
 import { Teams } from '@prisma/client';
 import UpdateTeam from '@components/UpdateTeam';
+import JudgePanel from '@components/JudgePanel';
 
 interface QuestionsProps {
   teams: Teams[]
@@ -62,6 +63,7 @@ const Teams: NextPage<QuestionsProps> = ({ teams }) => {
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{team.name}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{team.score}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <JudgePanel id={team.id} name={team.name} />
                       <UpdateTeam id={team.id} name={team.name} />
                       <button onClick={() => deleteQuestion(team.id)} className="ml-1 text-red-600 hover:text-indigo-900">
                         Delete
