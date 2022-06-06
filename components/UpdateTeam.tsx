@@ -38,7 +38,7 @@ const UpdateTeam = ({ id, name}: Props) => {
 
         <button
             type="button"
-            className="text-indigo-600 hover:text-indigo-900"
+            className="text-indigo-600 ml-1 hover:text-indigo-900"
             onClick={() => setOpen(true)}
         >
             Edit
