@@ -9,6 +9,7 @@ interface PlayProps {
     questions: {
         id: number;
         content: string;
+        choices?: string;
     }[]
     teams: {
         id: number;
@@ -33,9 +34,13 @@ export const getServerSideProps = authorizeRequest(async () => {
     return {
         props: {
             questions: await prisma.questions.findMany({
+                orderBy: {
+                    id: 'asc'
+                },
                 select: {
                     id: true,
-                    content: true
+                    content: true,
+                    choices: true
                 }
             }),
             teams: await prisma.teams.findMany({

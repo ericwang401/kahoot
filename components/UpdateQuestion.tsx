@@ -8,7 +8,8 @@ import axios from 'axios'
 import { useRefreshProps } from '@util/routerUtil';
 
 const QuestionSchema = Yup.object().shape({
-    content: Yup.string().min(1, 'Too short').required('Required')
+    content: Yup.string().min(1, 'Too short').required('Required'),
+    choices: Yup.string()
 })
 
 interface Values {
@@ -18,9 +19,10 @@ interface Values {
 interface Props {
     id: number
     content: string
+    choices?: string
 }
 
-const UpdateQuestion = ({ id, content}: Props) => {
+const UpdateQuestion = ({ id, content, choices}: Props) => {
     const [open, setOpen] = useState(false)
     const { refresh } = useRefreshProps()
 
@@ -71,7 +73,8 @@ const UpdateQuestion = ({ id, content}: Props) => {
                             <Dialog.Panel className="relative bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-lg sm:w-full">
                                 <Formik validationSchema={QuestionSchema} initialValues={{
                                     id,
-                                    content
+                                    content,
+                                    choices
                                 }} onSubmit={onSubmit}>
                                     {() => (<Form>
 
@@ -86,6 +89,7 @@ const UpdateQuestion = ({ id, content}: Props) => {
                                                     </Dialog.Title>
                                                     <div className="mt-2">
                                                         <Field type="text" name="content" label="Content" />
+                                                        <Field type="text" name="choices" label="Choices (separate with |)" />
                                                     </div>
                                                 </div>
                                             </div>

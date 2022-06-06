@@ -11,6 +11,7 @@ interface GameContainerProps {
     questions: {
         id: number;
         content: string;
+        choices?: string;
     }[]
     teams: {
         id: number;
@@ -167,22 +168,32 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
                 </div>
             }
             <Leaderboard onClick={() => setShowLeaderboard(false)} show={showLeaderboard} completed={completed} />
-            {!showLeaderboard && <>{!connected &&
-                <div className="rounded-md bg-red-50 p-4">
-                    <div className="flex">
-                        <div className="flex-shrink-0">
-                            <ExclamationCircleIcon className="h-5 w-5 text-red-400" aria-hidden="true" />
-                        </div>
-                        <div className="ml-3">
-                            <p className="text-sm font-medium text-red-800">Disconnected from server</p>
+            {!showLeaderboard && <>
+
+                {!connected &&
+                    <div className="rounded-md bg-red-50 p-4">
+                        <div className="flex">
+                            <div className="flex-shrink-0">
+                                <ExclamationCircleIcon className="h-5 w-5 text-red-400" aria-hidden="true" />
+                            </div>
+                            <div className="ml-3">
+                                <p className="text-sm font-medium text-red-800">Disconnected from server</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-            }
+                }
                 <div className="shadow mt-5 sm:rounded-md sm:overflow-hidden bg-white">
-                    <motion.div animate={controls}  className='h-5 w-full bg-indigo-500'></motion.div>
+                    <motion.div animate={controls} className='h-5 w-full bg-indigo-500'></motion.div>
                     <div className='px-4 py-5 sm:p-6'>
-                        {questions.length > 0 && <h1 className="text-7xl font-bold">{selectedQuestion + 1}. {questions[selectedQuestion].content}</h1>}
+                        {questions.length > 0 && <>
+                            <h1 className="text-7xl font-bold">{selectedQuestion + 1}. {questions[selectedQuestion].content}</h1>
+                            { questions[selectedQuestion].choices && <>
+                                <h3 className='text-2xl'>Choices</h3>
+                                <ul className='list-disc pl-6'>
+                                    { questions[selectedQuestion].choices?.split('|').map(choice => <li className='font-bold text-4xl' key={choice}>{choice}</li>)}
+                                </ul>
+                            </>}
+                        </>}
                         {questions.length === 0 &&
                             <div className="rounded-md bg-red-50 p-4">
                                 <div className="flex">
@@ -234,9 +245,9 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
                 </div>
 
                 {!showLeaderboard && <div className='absolute w-full mt-5 grid grid-cols-3 gap-5'>
-                        { teamsThatBuzzed.map((team, index) => <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className='shadow sm:rounded-md sm:overflow-hidden bg-white px-4 py-5 sm:p-6' key={team}>
-                            <p>{index + 1}. { teams.find(oneTeam => oneTeam.id == team )?.name }</p>
-                        </motion.div>) }
+                    {teamsThatBuzzed.map((team, index) => <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className='shadow sm:rounded-md sm:overflow-hidden bg-white px-4 py-5 sm:p-6' key={team}>
+                        <p>{index + 1}. {teams.find(oneTeam => oneTeam.id == team)?.name}</p>
+                    </motion.div>)}
                 </div>}
 
             </>}
