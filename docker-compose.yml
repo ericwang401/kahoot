@@ -1,9 +1,11 @@
 services:
   node:
-    build: ./Development
+    build:
+      context: .
+      dockerfile: ./Development
     restart: "no"
     ports:
-      - 3000:3000
+        - 3000:3000
     tty: true
     volumes:
       - .:/app/
@@ -15,9 +17,3 @@ services:
       - ./.env
     volumes:
       - ./data/postgres:/var/lib/postgresql/data
-#  prisma-studio:
-#    image: timothyjmiller/prisma-studio:latest
-#    ports:
-#      - 5555:5555
-#    env_file:
-#      - .env
