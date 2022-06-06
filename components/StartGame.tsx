@@ -6,6 +6,7 @@ interface StartGameProps {
     questions: {
         id: number;
         content: string;
+        choices?: string;
     }[]
     teams: {
         id: number;

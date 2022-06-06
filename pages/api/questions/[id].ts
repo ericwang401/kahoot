@@ -23,6 +23,7 @@ const put = {
       where: { id: req.body.id },
       data: {
         content: req.body.content,
+        choices: req.body.choices,
       },
     })
 

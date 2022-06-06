@@ -2,7 +2,6 @@ import { NextPage } from 'next';
 import AppLayout from '@components/AppLayout';
 import authorizeRequest from '@middlewares/authorizeRequest'
 import prisma from '@util/prisma';
-import { Questions } from '@prisma/client';
 import CreateQuestion from '@components/CreateQuestion';
 import axios from 'axios';
 import { useRefreshProps } from '@util/routerUtil';
@@ -12,6 +11,8 @@ interface QuestionsProps {
   questions: {
     id: number;
     content: string;
+    choices?
+    : string;
   }[];
 }
 
@@ -41,18 +42,25 @@ const Questions: NextPage<QuestionsProps> = ({ questions }) => {
                   >
                     Question
                   </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Choices
+                  </th>
                   <th scope="col" className="relative px-6 py-3">
                     <span className="sr-only">Actions</span>
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {questions.map((person, personIdx) => (
-                  <tr key={person.id} className={personIdx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{person.content}</td>
+                {questions.map((question, questionIdx) => (
+                  <tr key={question.id} className={questionIdx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{question.content}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{question.choices}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <UpdateQuestion id={person.id} content={person.content} />
-                      <button onClick={() => deleteQuestion(person.id)} className="ml-1 text-red-600 hover:text-indigo-900">
+                      <UpdateQuestion {...question} />
+                      <button onClick={() => deleteQuestion(question.id)} className="ml-1 text-red-600 hover:text-indigo-900">
                         Delete
                       </button>
                     </td>
@@ -68,12 +76,15 @@ const Questions: NextPage<QuestionsProps> = ({ questions }) => {
 }
 
 export const getServerSideProps = authorizeRequest(async () => {
-  let questions: (Omit<Questions, 'createdAt' | 'updatedAt'> & { 'createdAt': Date | string, 'updatedAt': Date | string | null })[] = await prisma.questions.findMany()
-  questions.map(question => {
-    question.createdAt = question.createdAt.toString()
-
-    if (!question.updatedAt) return;
-    question.updatedAt = question.updatedAt?.toString()
+  let questions = await prisma.questions.findMany({
+    orderBy: {
+        id: 'asc'
+    },
+    select: {
+      id: true,
+      content: true,
+      choices: true
+    }
   })
   return {
     props: {
