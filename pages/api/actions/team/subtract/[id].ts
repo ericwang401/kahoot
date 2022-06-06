@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { withProperMethods } from '@middlewares/withProperMethod'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import prisma from '@util/prisma'
@@ -15,7 +17,7 @@ const subtract = async (req: NextApiRequest, res: NextApiResponse) => {
     return
   }
 
-  if (team.score === 0) {
+  if (team.score <= 0) {
     res.status(200).json({
       message: 'Team score is already 0',
     })
@@ -29,6 +31,11 @@ const subtract = async (req: NextApiRequest, res: NextApiResponse) => {
     data: {
       score: team.score - 1,
     },
+  })
+
+  res.socket.server.io.sockets.emit('score-change-event', {
+    id: team.id,
+    score: team.score - 1,
   })
 
   res.status(200).end()
