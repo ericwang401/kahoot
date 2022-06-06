@@ -5,7 +5,6 @@ import classNames from '@util/classNames'
 import Leaderboard from '@components/Leaderboard'
 import axios from 'axios'
 import { motion, useAnimation } from 'framer-motion'
-import { emitWarning } from 'process'
 
 interface GameContainerProps {
     questions: {
@@ -61,6 +60,11 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
                         const check = teams.find(team => team.id == id)
                         if (!check) return oldId;
                         if (oldId) return oldId;
+
+                        axios.post(`/api/actions/answer/${id}`, {
+                            type: 'trafficLightEvent'
+                        })
+
 
                         return id
                     })
