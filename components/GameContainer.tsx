@@ -188,9 +188,9 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
                         {questions.length > 0 && <>
                             <h1 className="text-7xl font-bold">{selectedQuestion + 1}. {questions[selectedQuestion].content}</h1>
                             { questions[selectedQuestion].choices && <>
-                                <h3 className='text-2xl'>Choices</h3>
-                                <ul className='list-disc pl-6'>
-                                    { questions[selectedQuestion].choices?.split('|').map(choice => <li className='font-bold text-4xl' key={choice}>{choice}</li>)}
+                                <h3 className='text-2xl mt-3'>Choices</h3>
+                                <ul className='list-disc pl-6 mt-3'>
+                                    { questions[selectedQuestion].choices?.split('|').map(choice => <li className='font-bold text-4xl mt-2' key={choice}>{choice}</li>)}
                                 </ul>
                             </>}
                         </>}
