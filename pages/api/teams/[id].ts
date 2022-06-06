@@ -30,4 +30,15 @@ const put = {
   },
 }
 
-export default withAuthorized(withProperMethods([destroy, put]))
+const get = {
+  method: 'GET' as const,
+  handler: async (req: NextApiRequest, res: NextApiResponse) => {
+    await prisma.teams.findUnique({
+      where: {
+        id: parseInt(req.query.id as string),
+      }
+    })
+  }
+}
+
+export default withAuthorized(withProperMethods([destroy, put, get]))

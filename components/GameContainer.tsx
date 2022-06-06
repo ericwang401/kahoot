@@ -82,7 +82,7 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
     }
 
     const markAsCorrect = async () => {
-        await axios.post(`/api/game/team/add/${selectedTeamId}`)
+        await axios.post(`/api/actions/team/add/${selectedTeamId}`)
 
         setShowLeaderboard(true)
         setSelectedTeamId(null)
@@ -110,7 +110,7 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
 
     const denyPoints = async () => {
         const deniedTeam = teamsThatBuzzed.find(teamId => teamId == selectedTeamId)
-        await axios.post(`/api/game/team/subtract/${deniedTeam}`)
+        await axios.post(`/api/actions/team/subtract/${deniedTeam}`)
         // find team that buzzed by team id and get index
         const teamIndex = teamsThatBuzzed.findIndex(teamId => teamId == selectedTeamId)
         const nextTeam = teamsThatBuzzed[teamIndex + 1]
