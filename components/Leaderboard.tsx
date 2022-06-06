@@ -26,6 +26,7 @@ const Leaderboard = ({ show, onClick, completed }: LeaderboardProps) => {
         {completed && <Confetti
             width={width}
             height={height}
+            className='!fixed'
         />}
         {(show || completed) && <>
             <h1 className='text-4xl mt-4 font-bold text-center'>{completed ? 'CONGRATS!!!' : 'SHEEESH DOING GOOD!'}</h1>
