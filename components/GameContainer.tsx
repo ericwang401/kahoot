@@ -198,7 +198,7 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
                             <motion.div animate={controls} className='h-5 w-full bg-indigo-500'></motion.div>
                             <div className='px-4 py-5 sm:p-6'>
                                 {questions.length > 0 && <>
-                                    <h1 className="text-7xl font-bold">{selectedQuestion + 1}. {questions[selectedQuestion].content}</h1>
+                                    <h1 className={classNames(questions[selectedQuestion].content.length > 40 ? 'text-4xl' : 'text-7xl', 'font-bold')}>{selectedQuestion + 1}. {questions[selectedQuestion].content}</h1>
                                     {questions[selectedQuestion].choices && <>
                                         <h3 className='text-2xl mt-3'>Choices</h3>
                                         <ul className='list-disc pl-6 mt-3'>

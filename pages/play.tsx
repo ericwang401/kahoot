@@ -1,7 +1,7 @@
 import StartGame from '@components/StartGame'
 import type { NextPage } from 'next'
 import prisma from '@util/prisma'
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import GameContainer from '@components/GameContainer';
 import authorizeRequest from '@middlewares/authorizeRequest';
 
@@ -21,12 +21,17 @@ interface PlayProps {
 const Play: NextPage<PlayProps> = ({ questions, teams }) => {
     const [playing, setPlaying] = useState(false)
     const [answerTimeout, setAnswerTimeout] = useState(15)
+    // shuffle questions array
+    const shuffledQuestions = useMemo(() => {
+        const shuffled = questions.sort(() => Math.random() - 0.5)
+        return shuffled
+    }, [questions])
 
     return <div className="max-w-7xl h-full mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl h-full mx-auto">
-            {!playing && <StartGame timeoutValue={answerTimeout} onChange={setAnswerTimeout} onClick={() => setPlaying(true)} questions={questions} teams={teams} />}
+            {!playing && <StartGame timeoutValue={answerTimeout} onChange={setAnswerTimeout} onClick={() => setPlaying(true)} questions={shuffledQuestions} teams={teams} />}
 
-            {playing && <GameContainer timeoutValue={answerTimeout} questions={questions} teams={teams} />}
+            {playing && <GameContainer timeoutValue={answerTimeout} questions={shuffledQuestions} teams={teams} />}
         </div>
     </div>
 }

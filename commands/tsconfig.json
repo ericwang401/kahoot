@@ -1,33 +1,15 @@
 {
-  "ts-node": {
-    "compilerOptions": {
-      "target": "es5",
-      "module": "commonjs",
-      "sourceMap": true,
-      "strict": true,
-      "noEmitOnError": true,
-      "paths": {
-        "@components/*": ["../components/*"],
-        "@middlewares/*": ["../middlewares/*"],
-        "@util/*": ["../util/*"]
-      },
-      "typeRoots": ["node_modules/@types"]
-    },
-  },
+  "extends": "@tsconfig/node16/tsconfig.json",
   "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
-    "sourceMap": true,
-    "strict": true,
-    "noEmitOnError": true,
+    "baseUrl": "../",
     "paths": {
-      "@components/*": ["../components/*"],
-      "@middlewares/*": ["../middlewares/*"],
-      "@util/*": ["../util/*"]
-    },
-    "typeRoots": ["node_modules/@types"]
+      "@components/*": ["components/*"],
+      "@middlewares/*": ["middlewares/*"],
+      "@commands/*": ["commands/*"],
+      "@util/*": ["util/*"],
+      "@/*": ["commands/*"]
+    }
   },
-
-  "include": ["../next-env.d.ts", "../**/*.ts", "../**/*.tsx"],
+  "include": ["../**/*.ts", "../**/*.tsx"],
   "exclude": ["../node_modules"]
 }

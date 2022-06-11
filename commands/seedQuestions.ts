@@ -2,7 +2,6 @@ import prisma from '@util/prisma'
 import { Prisma } from '@prisma/client'
 import parseQuestions from '@util/parseQuestion'
 
-
 const questions = `1. TF: Tigers live in the jungle? A:True%|B:False
 2. What is the largest rain forest in the world? Amazon rain forest%
 3. What is the largest river in the world? The Amazon River%
@@ -55,11 +54,19 @@ const questions = `1. TF: Tigers live in the jungle? A:True%|B:False
 50. What is the theme of this year's competition? Jungle Adventure%`
 
 const seed = async () => {
-  const data = parseQuestions(questions) as Prisma.Enumerable<Prisma.QuestionsCreateManyInput>
+  const data = parseQuestions(
+    questions
+  ) as Prisma.Enumerable<Prisma.QuestionsCreateManyInput>
 
   await prisma.questions.deleteMany({})
 
   await prisma.questions.createMany({ data })
+
+  console.log('Seeded')
+}
+
+if (require.main === module) {
+  seed()
 }
 
 export default seed
