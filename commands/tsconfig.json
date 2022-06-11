@@ -1,7 +1,6 @@
 {
   "extends": "@tsconfig/node16/tsconfig.json",
   "compilerOptions": {
-    "rootDir": "../",
     "baseUrl": "../",
     "paths": {
       "@components/*": ["components/*"],

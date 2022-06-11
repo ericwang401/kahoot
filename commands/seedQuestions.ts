@@ -1,6 +1,4 @@
-import test from '@/test'
-test()
-/* import prisma from '@util/prisma'
+import prisma from '@util/prisma'
 import { Prisma } from '@prisma/client'
 import parseQuestions from '@util/parseQuestion'
 
@@ -63,7 +61,12 @@ const seed = async () => {
   await prisma.questions.deleteMany({})
 
   await prisma.questions.createMany({ data })
+
+  console.log('Seeded')
+}
+
+if (require.main === module) {
+  seed()
 }
 
 export default seed
- */
