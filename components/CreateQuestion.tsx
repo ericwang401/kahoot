@@ -9,12 +9,14 @@ import { useRefreshProps } from '@util/routerUtil';
 
 const QuestionSchema = Yup.object().shape({
     content: Yup.string().min(1, 'Too short').required('Required'),
-    choices: Yup.string()
+    choices: Yup.string(),
+    correctAnswer: Yup.string(),
 })
 
 interface Values {
     content: string
     choices: string
+    correctAnswer: string
 }
 
 const CreateQuestion = () => {
@@ -68,7 +70,8 @@ const CreateQuestion = () => {
                             <Dialog.Panel className="relative bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-lg sm:w-full">
                                 <Formik validationSchema={QuestionSchema} initialValues={{
                                     content: '',
-                                    choices: ''
+                                    choices: '',
+                                    correctAnswer: ''
                                 }} onSubmit={onSubmit}>
                                     {() => (<Form>
 
@@ -84,6 +87,7 @@ const CreateQuestion = () => {
                                                     <div className="mt-2">
                                                         <Field type="text" name="content" label="Content" />
                                                         <Field type="text" name="choices" label="Choices (separate with |)" />
+                                                        <Field type="text" name="correctAnswer" label="Correct Answer" />
                                                     </div>
                                                 </div>
                                             </div>
