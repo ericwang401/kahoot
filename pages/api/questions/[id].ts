@@ -24,6 +24,7 @@ const put = {
       data: {
         content: req.body.content,
         choices: req.body.choices,
+        correctAnswer: req.body.correctAnswer,
       },
     })
 
