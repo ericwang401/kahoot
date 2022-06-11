@@ -13,6 +13,7 @@ interface QuestionsProps {
     content: string;
     choices?
     : string;
+    correctAnswer?: string
   }[];
 }
 
@@ -83,7 +84,8 @@ export const getServerSideProps = authorizeRequest(async () => {
     select: {
       id: true,
       content: true,
-      choices: true
+      choices: true,
+      correctAnswer: true,
     }
   })
   return {

@@ -10,6 +10,7 @@ interface PlayProps {
         id: number;
         content: string;
         choices?: string;
+        correctAnswer?: string;
     }[]
     teams: {
         id: number;
@@ -40,7 +41,8 @@ export const getServerSideProps = authorizeRequest(async () => {
                 select: {
                     id: true,
                     content: true,
-                    choices: true
+                    choices: true,
+                    correctAnswer: true
                 }
             }),
             teams: await prisma.teams.findMany({

@@ -9,7 +9,8 @@ const get = {
     await prisma.questions.create({
       data: {
         content: req.body.content,
-        choices: req.body.choices
+        choices: req.body.choices,
+        correctAnswer: req.body.correctAnswer,
       },
     })
 

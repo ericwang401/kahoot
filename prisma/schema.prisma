@@ -21,6 +21,7 @@ model Questions {
   id        Int      @id @default(autoincrement())
   content   String
   choices   String?
+  correctAnswer String?
   createdAt DateTime @default(now())
   updatedAt DateTime? @updatedAt
 }

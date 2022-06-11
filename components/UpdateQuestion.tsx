@@ -9,20 +9,24 @@ import { useRefreshProps } from '@util/routerUtil';
 
 const QuestionSchema = Yup.object().shape({
     content: Yup.string().min(1, 'Too short').required('Required'),
-    choices: Yup.string()
+    choices: Yup.string(),
+    correctAnswer: Yup.string(),
 })
 
 interface Values {
-    content: string
+    content: string,
+    choices: string,
+    correctAnswer: string,
 }
 
 interface Props {
     id: number
     content: string
     choices?: string
+    correctAnswer?: string
 }
 
-const UpdateQuestion = ({ id, content, choices}: Props) => {
+const UpdateQuestion = ({ id, content, choices, correctAnswer}: Props) => {
     const [open, setOpen] = useState(false)
     const { refresh } = useRefreshProps()
 
@@ -74,10 +78,10 @@ const UpdateQuestion = ({ id, content, choices}: Props) => {
                                 <Formik validationSchema={QuestionSchema} initialValues={{
                                     id,
                                     content,
-                                    choices
+                                    choices: choices || '',
+                                    correctAnswer: correctAnswer || '',
                                 }} onSubmit={onSubmit}>
                                     {() => (<Form>
-
                                         <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                                             <div className="sm:flex sm:items-start">
                                                 <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-indigo-100 sm:mx-0 sm:h-10 sm:w-10">
@@ -90,6 +94,7 @@ const UpdateQuestion = ({ id, content, choices}: Props) => {
                                                     <div className="mt-2">
                                                         <Field type="text" name="content" label="Content" />
                                                         <Field type="text" name="choices" label="Choices (separate with |)" />
+                                                        <Field type="text" name="correctAnswer" label="Correct Answer" />
                                                     </div>
                                                 </div>
                                             </div>
