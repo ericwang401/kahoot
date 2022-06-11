@@ -161,122 +161,125 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
         socketInitializer()
     }, [])
 
-    return <div className='flex justify-center relative'>
-        <div className='grid relative place-items-center h-full w-full'>
-            <div className='w-full relative'>
-                {connected &&
-                    <div className="rounded-md bg-green-50 p-4">
-                        <div className="flex">
-                            <div className="flex-shrink-0">
-                                <CheckCircleIcon className="h-5 w-5 text-green-400" aria-hidden="true" />
-                            </div>
-                            <div className="ml-3">
-                                <p className="text-sm font-medium text-green-800">Connected to server</p>
-                            </div>
-                        </div>
+    return <>
+        {!connected &&
+            <div className="rounded-md bg-red-50 p-4">
+                <div className="flex">
+                    <div className="flex-shrink-0">
+                        <ExclamationCircleIcon className="h-5 w-5 text-red-400" aria-hidden="true" />
                     </div>
-                }
-                <Leaderboard onClick={() => setShowLeaderboard(false)} show={showLeaderboard} completed={completed} />
-                {!showLeaderboard && <>
-
-                    {!connected &&
-                        <div className="rounded-md bg-red-50 p-4">
-                            <div className="flex">
-                                <div className="flex-shrink-0">
-                                    <ExclamationCircleIcon className="h-5 w-5 text-red-400" aria-hidden="true" />
-                                </div>
-                                <div className="ml-3">
-                                    <p className="text-sm font-medium text-red-800">Disconnected from server</p>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                    <div className="shadow mt-5 sm:rounded-md sm:overflow-hidden bg-white">
-                        <motion.div animate={controls} className='h-5 w-full bg-indigo-500'></motion.div>
-                        <div className='px-4 py-5 sm:p-6'>
-                            {questions.length > 0 && <>
-                                <h1 className="text-7xl font-bold">{selectedQuestion + 1}. {questions[selectedQuestion].content}</h1>
-                                {questions[selectedQuestion].choices && <>
-                                    <h3 className='text-2xl mt-3'>Choices</h3>
-                                    <ul className='list-disc pl-6 mt-3'>
-                                        {questions[selectedQuestion].choices?.split('|').map(choice => <li className='font-bold text-4xl mt-2' key={choice}>{choice}</li>)}
-                                    </ul>
-                                </>}
-                            </>}
-                            {questions.length === 0 &&
-                                <div className="rounded-md bg-red-50 p-4">
-                                    <div className="flex">
-                                        <div className="flex-shrink-0">
-                                            <ExclamationCircleIcon className="h-5 w-5 text-red-400" aria-hidden="true" />
-                                        </div>
-                                        <div className="ml-3">
-                                            <p className="text-sm font-medium text-red-800">There are no questions. Make sure you created some</p>
-                                        </div>
-                                    </div>
-                                </div>}
-                        </div>
+                    <div className="ml-3">
+                        <p className="text-sm font-medium text-red-800">Disconnected from server</p>
                     </div>
-
-                    <div className={classNames(selectedTeamId ? 'bg-green-400' : 'bg-white', !selectedTeamId && !isAcceptingAnswers ? 'bg-red-400' : 'bg-white', 'shadow mt-5 sm:rounded-md sm:overflow-hidden px-4 py-5 sm:p-6')}>
-                        {!selectedTeamId && isAcceptingAnswers && <p>Waiting for contestant to buzz in</p>}
-                        {selectedTeamId && <h3 className='text-4xl font-bold'>{selectedTeam ? selectedTeam.name : ''} buzzed in</h3>}
-                        {!selectedTeamId && !isAcceptingAnswers && <h3 className='text-4xl font-bold'>No one answered</h3>}
-                    </div>
-
-                    <div className="flex justify-end mt-4 space-x-2">
-                        {selectedTeamId &&
-                            <>
-                                <button
-                                    type="button"
-                                    className="w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm"
-                                    onClick={denyPoints}
-                                >
-                                    Deny points
-                                </button>
-
-                                <button
-                                    type="button"
-                                    className="w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:w-auto sm:text-sm"
-                                    onClick={markAsCorrect}
-                                >
-                                    Mark as correct
-                                </button>
-                            </>}
-                        <div className="grow"></div>
-
-                        <button
-                            type="button"
-                            className="w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:w-auto sm:text-sm"
-                            onClick={() => setShowAnswer(val => !val)}
-                        >
-                            Toggle Answer
-                        </button>
-                        <button
-                            type="button"
-                            className="w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm"
-                            onClick={skip}
-                        >
-                            Skip
-                        </button>
-                    </div>
-
-                    {!showLeaderboard && <div className='absolute w-full mt-5 grid grid-cols-3 gap-5'>
-                        {teamsThatBuzzed.map((team, index) => <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className='shadow sm:rounded-md sm:overflow-hidden bg-white px-4 py-5 sm:p-6' key={team}>
-                            <p>{index + 1}. {teams.find(oneTeam => oneTeam.id == team)?.name}</p>
-                        </motion.div>)}
-                    </div>}
-
-                </>}
+                </div>
             </div>
-        </div>
-        <div>
+        }
 
-            {showAnswer && <div className='ml-5 min-w-[30rem] absolute shadow sm:rounded-md sm:overflow-hidden bg-white px-4 py-5 sm:p-6'>
-                <h3 className='text-4xl font-bold'>Correct Answer</h3>
-                <p className='text-2xl'>{questions[selectedQuestion].correctAnswer ? questions[selectedQuestion].correctAnswer : 'No correct answers'}</p>
-            </div>}
-        </div>
-    </div>
+        {connected &&
+            <div className="rounded-md bg-green-50 p-4">
+                <div className="flex">
+                    <div className="flex-shrink-0">
+                        <CheckCircleIcon className="h-5 w-5 text-green-400" aria-hidden="true" />
+                    </div>
+                    <div className="ml-3">
+                        <p className="text-sm font-medium text-green-800">Connected to server</p>
+                    </div>
+                </div>
+            </div>
+        }
+        <div className='flex justify-center relative'>
+            <div className='grid relative place-items-center h-full w-full'>
+                <div className='w-full relative'>
+                    <Leaderboard onClick={() => setShowLeaderboard(false)} show={showLeaderboard} completed={completed} />
+                    {!showLeaderboard && <>
+
+
+                        <div className="shadow mt-5 sm:rounded-md sm:overflow-hidden bg-white">
+                            <motion.div animate={controls} className='h-5 w-full bg-indigo-500'></motion.div>
+                            <div className='px-4 py-5 sm:p-6'>
+                                {questions.length > 0 && <>
+                                    <h1 className="text-7xl font-bold">{selectedQuestion + 1}. {questions[selectedQuestion].content}</h1>
+                                    {questions[selectedQuestion].choices && <>
+                                        <h3 className='text-2xl mt-3'>Choices</h3>
+                                        <ul className='list-disc pl-6 mt-3'>
+                                            {questions[selectedQuestion].choices?.split('|').map(choice => <li className='font-bold text-4xl mt-2' key={choice}>{choice}</li>)}
+                                        </ul>
+                                    </>}
+                                </>}
+                                {questions.length === 0 &&
+                                    <div className="rounded-md bg-red-50 p-4">
+                                        <div className="flex">
+                                            <div className="flex-shrink-0">
+                                                <ExclamationCircleIcon className="h-5 w-5 text-red-400" aria-hidden="true" />
+                                            </div>
+                                            <div className="ml-3">
+                                                <p className="text-sm font-medium text-red-800">There are no questions. Make sure you created some</p>
+                                            </div>
+                                        </div>
+                                    </div>}
+                            </div>
+                        </div>
+
+                        <div className={classNames(selectedTeamId ? 'bg-green-400' : 'bg-white', !selectedTeamId && !isAcceptingAnswers ? 'bg-red-400' : 'bg-white', 'shadow mt-5 sm:rounded-md sm:overflow-hidden px-4 py-5 sm:p-6')}>
+                            {!selectedTeamId && isAcceptingAnswers && <p>Waiting for contestant to buzz in</p>}
+                            {selectedTeamId && <h3 className='text-4xl font-bold'>{selectedTeam ? selectedTeam.name : ''} buzzed in</h3>}
+                            {!selectedTeamId && !isAcceptingAnswers && <h3 className='text-4xl font-bold'>No one answered</h3>}
+                        </div>
+
+                        <div className="flex justify-end mt-4 space-x-2">
+                            {selectedTeamId &&
+                                <>
+                                    <button
+                                        type="button"
+                                        className="w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm"
+                                        onClick={denyPoints}
+                                    >
+                                        Deny points
+                                    </button>
+
+                                    <button
+                                        type="button"
+                                        className="w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:w-auto sm:text-sm"
+                                        onClick={markAsCorrect}
+                                    >
+                                        Mark as correct
+                                    </button>
+                                </>}
+                            <div className="grow"></div>
+
+                            <button
+                                type="button"
+                                className="w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:w-auto sm:text-sm"
+                                onClick={() => setShowAnswer(val => !val)}
+                            >
+                                Toggle Answer
+                            </button>
+                            <button
+                                type="button"
+                                className="w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm"
+                                onClick={skip}
+                            >
+                                Skip
+                            </button>
+                        </div>
+
+                        {!showLeaderboard && <div className='absolute w-full mt-5 grid grid-cols-3 gap-5'>
+                            {teamsThatBuzzed.map((team, index) => <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className='shadow sm:rounded-md sm:overflow-hidden bg-white px-4 py-5 sm:p-6' key={team}>
+                                <p>{index + 1}. {teams.find(oneTeam => oneTeam.id == team)?.name}</p>
+                            </motion.div>)}
+                        </div>}
+
+                    </>}
+                </div>
+            </div>
+            <div>
+
+                {showAnswer && <div className='ml-5 mt-5 min-w-[30rem] absolute shadow sm:rounded-md sm:overflow-hidden bg-white px-4 py-5 sm:p-6'>
+                    <h3 className='text-4xl font-bold'>Correct Answer</h3>
+                    <p className='text-2xl'>{questions[selectedQuestion].correctAnswer ? questions[selectedQuestion].correctAnswer : 'No correct answers'}</p>
+                </div>}
+            </div>
+        </div></>
 }
 
 export default GameContainer
