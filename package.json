@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start -p 80",
-    "lint": "next lint"
+    "lint": "next lint",
+    "seed:hs-questions": "ts-node --project commands/tsconfig.json commands/addHighSchoolQuestions.ts"
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "^1.9.0",
