@@ -1,0 +1,33 @@
+{
+  "ts-node": {
+    "compilerOptions": {
+      "target": "es5",
+      "module": "commonjs",
+      "sourceMap": true,
+      "strict": true,
+      "noEmitOnError": true,
+      "paths": {
+        "@components/*": ["../components/*"],
+        "@middlewares/*": ["../middlewares/*"],
+        "@util/*": ["../util/*"]
+      },
+      "typeRoots": ["node_modules/@types"]
+    },
+  },
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "sourceMap": true,
+    "strict": true,
+    "noEmitOnError": true,
+    "paths": {
+      "@components/*": ["../components/*"],
+      "@middlewares/*": ["../middlewares/*"],
+      "@util/*": ["../util/*"]
+    },
+    "typeRoots": ["node_modules/@types"]
+  },
+
+  "include": ["../next-env.d.ts", "../**/*.ts", "../**/*.tsx"],
+  "exclude": ["../node_modules"]
+}
