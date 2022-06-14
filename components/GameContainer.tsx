@@ -56,15 +56,21 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
     }
 
     const correctSoundEffects = [
+        'https://www.myinstants.com/media/sounds/family-feud-good-answer.mp3',
         'https://www.myinstants.com/media/sounds/winner-bell-game-show-sound-effect.mp3',
         'https://www.myinstants.com/media/sounds/correct.mp3',
-        'https://www.myinstants.com/media/sounds/ding-sound-effect_1.mp3'
+        'https://www.myinstants.com/media/sounds/ding-sound-effect_1.mp3',
+        'https://cdn.discordapp.com/attachments/727562307798040628/792948342127853578/trumpet_albert.mp3',
+
     ]
 
     const incorrectSoundEffects = [
         'https://www.myinstants.com/media/sounds/bruh.mp3',
         'https://www.myinstants.com/media/sounds/answer-wrong.mp3',
-        'https://www.myinstants.com/media/sounds/vine-boom.mp3'
+        'https://www.myinstants.com/media/sounds/vine-boom.mp3',
+        'https://www.myinstants.com/media/sounds/minecraft-steve-ooof.mp3',
+        'https://www.myinstants.com/media/sounds/oof_withreverb.mp3',
+        'https://www.myinstants.com/media/sounds/the-beginning-of-sicko-mode-sound-effect-for-memes_xAcUeuI.mp3'
     ]
 
     const speechSynthesisUtterance = useMemo(async () => {
