@@ -1,10 +1,11 @@
 import io from 'socket.io-client'
-import { MutableRefObject, useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { CheckCircleIcon, ExclamationCircleIcon } from '@heroicons/react/solid'
 import classNames from '@util/classNames'
 import Leaderboard from '@components/Leaderboard'
 import axios from 'axios'
 import { motion, useAnimation } from 'framer-motion'
+import play from '@util/playSound'
 
 interface GameContainerProps {
     questions: {
@@ -37,6 +38,49 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
     const [completed, setCompleted] = useState(false)
     const selectedTeam = useMemo(() => teams.find(team => team.id == selectedTeamId), [selectedTeamId, teams])
     const controls = useAnimation()
+
+    const getVoices = (): Promise<SpeechSynthesisVoice[]> => {
+        return new Promise(
+            function (resolve, reject) {
+                let synth = window.speechSynthesis;
+                let id: NodeJS.Timer;
+
+                id = setInterval(() => {
+                    if (synth.getVoices().length !== 0) {
+                        resolve(synth.getVoices());
+                        clearInterval(id);
+                    }
+                }, 10);
+            }
+        )
+    }
+
+    const correctSoundEffects = [
+        'https://www.myinstants.com/media/sounds/family-feud-good-answer.mp3',
+        'https://www.myinstants.com/media/sounds/winner-bell-game-show-sound-effect.mp3',
+        'https://www.myinstants.com/media/sounds/correct.mp3',
+        'https://www.myinstants.com/media/sounds/ding-sound-effect_1.mp3',
+        'https://cdn.discordapp.com/attachments/727562307798040628/792948342127853578/trumpet_albert.mp3',
+
+    ]
+
+    const incorrectSoundEffects = [
+        'https://www.myinstants.com/media/sounds/bruh.mp3',
+        'https://www.myinstants.com/media/sounds/answer-wrong.mp3',
+        'https://www.myinstants.com/media/sounds/vine-boom.mp3',
+        'https://www.myinstants.com/media/sounds/minecraft-steve-ooof.mp3',
+        'https://www.myinstants.com/media/sounds/oof_withreverb.mp3',
+        'https://www.myinstants.com/media/sounds/the-beginning-of-sicko-mode-sound-effect-for-memes_xAcUeuI.mp3'
+    ]
+
+    const speechSynthesisUtterance = useMemo(async () => {
+        const speech = new SpeechSynthesisUtterance()
+        const voices = await getVoices()
+        console.log({voices})
+        speech.voice = voices.find(voice => voice.lang === 'en-GB') as SpeechSynthesisVoice
+        speech.rate = 0.7
+        return speech
+    }, [])
 
     const socketInitializer = async () => {
         await fetch('/api/verifySocketIsRunning')
@@ -91,6 +135,13 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
     const markAsCorrect = async () => {
         await axios.post(`/api/actions/team/add/${selectedTeamId}`)
 
+       /*  const speech = await speechSynthesisUtterance
+        speech.text = `good job ${selectedTeam?.name}`
+        window.speechSynthesis.speak(speech) */
+        // get random element from correctSoundEffects
+        const soundEffect = correctSoundEffects[Math.floor(Math.random() * correctSoundEffects.length)]
+        play(soundEffect)
+
         setShowLeaderboard(true)
         setSelectedTeamId(null)
         setTeamsThatBuzzed([])
@@ -120,6 +171,15 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
     const denyPoints = async () => {
         const deniedTeam = teamsThatBuzzed.find(teamId => teamId == selectedTeamId)
         await axios.post(`/api/actions/team/subtract/${deniedTeam}`)
+
+
+        /* const speech = await speechSynthesisUtterance
+        speech.text = `jaja tu pierdes ${selectedTeam?.name}`
+        window.speechSynthesis.speak(speech) */
+        // get random element from incorrectSoundEffects
+        const soundEffect = incorrectSoundEffects[Math.floor(Math.random() * incorrectSoundEffects.length)]
+        play(soundEffect)
+
         // find team that buzzed by team id and get index
         const teamIndex = teamsThatBuzzed.findIndex(teamId => teamId == selectedTeamId)
         const nextTeam = teamsThatBuzzed[teamIndex + 1]
