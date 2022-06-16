@@ -3,6 +3,7 @@ import { withProperMethods } from '@middlewares/withProperMethod'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import prisma from '@util/prisma'
 import withAuthorized from '@middlewares/withAuthorized'
+import startSocketServer from '@util/startSocketServer'
 
 const add = async (req: NextApiRequest, res: NextApiResponse) => {
   let team = await prisma.teams.findUnique({
@@ -15,6 +16,8 @@ const add = async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(404).end()
     return
   }
+
+  startSocketServer(req, res)
 
   if (req.body.modifier) {
     const modifier = parseInt(req.body.modifier as string)
