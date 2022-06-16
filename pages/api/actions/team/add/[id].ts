@@ -17,7 +17,7 @@ const add = async (req: NextApiRequest, res: NextApiResponse) => {
     return
   }
 
-  startSocketServer(req, res)
+  const socket = await startSocketServer(req, res)
 
   if (req.body.modifier) {
     const modifier = parseInt(req.body.modifier as string)
@@ -30,7 +30,7 @@ const add = async (req: NextApiRequest, res: NextApiResponse) => {
       },
     })
 
-    res.socket.server.io.sockets.emit('score-change-event', {
+    socket.sockets.emit('score-change-event', {
       id: team.id,
       score: team.score + modifier,
     })
@@ -45,7 +45,7 @@ const add = async (req: NextApiRequest, res: NextApiResponse) => {
       },
     })
 
-    res.socket.server.io.sockets.emit('score-change-event', {
+    socket.sockets.emit('score-change-event', {
       id: team.id,
       score: team.score + 2,
     })

@@ -9,8 +9,13 @@ const startSocketServer = async (
 ) => {
   if (!res.socket.server.io) {
     const io = new Server(res.socket.server)
-    res.socket.server.io = isObject
+    res.socket.server.io = io
+
+    return io
   }
+
+  return res.socket.server.io
+
 }
 
 export default startSocketServer

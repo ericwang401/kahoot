@@ -22,14 +22,14 @@ const JudgePanel = ({ id, name }: Props) => {
     useEffect(() => {
         axios.get(`/api/teams/meta/${id}`)
             .then(res => setScore(res.data.team.score as number))
-    })
+    }, [])
 
     const addScore = async () => {
         await axios.post(`/api/actions/team/add/${id}`, {
             modifier: 1
         })
 
-        setScore(score => score + 2)
+        setScore(score => score + 1)
     }
 
     const subtractScore = async () => {
