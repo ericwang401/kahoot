@@ -25,7 +25,9 @@ const JudgePanel = ({ id, name }: Props) => {
     })
 
     const addScore = async () => {
-        await axios.post(`/api/actions/team/add/${id}`)
+        await axios.post(`/api/actions/team/add/${id}`, {
+            modifier: 1
+        })
 
         setScore(score => score + 2)
     }
