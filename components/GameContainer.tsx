@@ -31,6 +31,7 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
     const [selectedQuestion, setSelectedQuestion] = useState<number>(0)
     const [selectedTeamId, setSelectedTeamId] = useState<number | null>(null)
     const [teamsThatBuzzed, setTeamsThatBuzzed] = useState<number[]>([])
+    const [teamsThatAnswered, setTeamsThatAnswered] = useState<number[]>([])
 
     const [isAcceptingAnswers, setIsAcceptingAnswers] = useState(true)
     const timeoutRef = useRef<NodeJS.Timeout>()
@@ -56,20 +57,14 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
     }
 
     const correctSoundEffects = [
-        'https://www.myinstants.com/media/sounds/family-feud-good-answer.mp3',
         'https://www.myinstants.com/media/sounds/winner-bell-game-show-sound-effect.mp3',
-        'https://www.myinstants.com/media/sounds/correct.mp3',
-        'https://www.myinstants.com/media/sounds/ding-sound-effect_1.mp3',
-        'https://cdn.discordapp.com/attachments/727562307798040628/792948342127853578/trumpet_albert.mp3',
+        // 'https://cdn.discordapp.com/attachments/727562307798040628/792948342127853578/trumpet_albert.mp3',
 
     ]
 
-    const incorrectSoundEffects = [
+    const incorrectSoundEffects = [/*
         'https://www.myinstants.com/media/sounds/bruh.mp3',
-        'https://www.myinstants.com/media/sounds/answer-wrong.mp3',
-        'https://www.myinstants.com/media/sounds/vine-boom.mp3',
-        'https://www.myinstants.com/media/sounds/minecraft-steve-ooof.mp3',
-        'https://www.myinstants.com/media/sounds/oof_withreverb.mp3',
+        'https://www.myinstants.com/media/sounds/oof_withreverb.mp3', */
         'https://www.myinstants.com/media/sounds/the-beginning-of-sicko-mode-sound-effect-for-memes_xAcUeuI.mp3'
     ]
 
@@ -102,26 +97,32 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
                 setIsAcceptingAnswers(isAccepting => {
                     if (!isAccepting) return isAccepting;
 
-                    setSelectedTeamId(oldId => {
-                        const check = teams.find(team => team.id == id)
-                        if (!check) return oldId;
-                        if (oldId) return oldId;
+                    setTeamsThatAnswered(oldTeamsThatAnswered => {
+                        if (oldTeamsThatAnswered.includes(id)) return oldTeamsThatAnswered;
 
-                        axios.post(`/api/actions/answer/${id}`, {
-                            type: 'trafficLightEvent'
+                        setSelectedTeamId(oldId => {
+                            const check = teams.find(team => team.id == id)
+                            if (!check) return oldId;
+                            if (oldId) return oldId;
+
+                            axios.post(`/api/actions/answer/${id}`, {
+                                type: 'trafficLightEvent'
+                            })
+
+
+                            return id
                         })
 
+                        setTeamsThatBuzzed(oldTeamsThatBuzzed => {
+                            const check = teams.find(team => team.id == id)
+                            if (!check) return oldTeamsThatBuzzed;
 
-                        return id
-                    })
+                            if (oldTeamsThatBuzzed.includes(id)) return oldTeamsThatBuzzed;
 
-                    setTeamsThatBuzzed(oldTeamsThatBuzzed => {
-                        const check = teams.find(team => team.id == id)
-                        if (!check) return oldTeamsThatBuzzed;
+                            return [...oldTeamsThatBuzzed, id]
+                        })
 
-                        if (oldTeamsThatBuzzed.includes(id)) return oldTeamsThatBuzzed;
-
-                        return [...oldTeamsThatBuzzed, id]
+                        return oldTeamsThatAnswered
                     })
 
                     return isAccepting
@@ -142,6 +143,7 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
         const soundEffect = correctSoundEffects[Math.floor(Math.random() * correctSoundEffects.length)]
         play(soundEffect)
 
+        setTeamsThatAnswered([])
         setShowLeaderboard(true)
         setSelectedTeamId(null)
         setTeamsThatBuzzed([])
@@ -155,6 +157,7 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
     }
 
     const skip = () => {
+        setTeamsThatAnswered([])
         setShowLeaderboard(true)
         setSelectedTeamId(null)
         setShowAnswer(false)
@@ -169,9 +172,14 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
     }
 
     const denyPoints = async () => {
-        const deniedTeam = teamsThatBuzzed.find(teamId => teamId == selectedTeamId)
+        const deniedTeam = teamsThatBuzzed.find(teamId => teamId == selectedTeamId) as number
         await axios.post(`/api/actions/team/subtract/${deniedTeam}`)
 
+        setTeamsThatAnswered(oldTeamsThatAnswered => {
+            if (oldTeamsThatAnswered.includes(oldTeamsThatAnswered[0])) return oldTeamsThatAnswered;
+
+            return [...oldTeamsThatAnswered, deniedTeam]
+        })
 
         /* const speech = await speechSynthesisUtterance
         speech.text = `jaja tu pierdes ${selectedTeam?.name}`
@@ -283,7 +291,7 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
                         <div className={classNames(selectedTeamId ? 'bg-green-400' : 'bg-white', !selectedTeamId && !isAcceptingAnswers ? 'bg-red-400' : 'bg-white', 'shadow mt-5 sm:rounded-md sm:overflow-hidden px-4 py-5 sm:p-6')}>
                             {!selectedTeamId && isAcceptingAnswers && <p>Waiting for contestant to buzz in</p>}
                             {selectedTeamId && <h3 className='text-4xl font-bold'>{selectedTeam ? selectedTeam.name : ''} buzzed in</h3>}
-                            {!selectedTeamId && !isAcceptingAnswers && <h3 className='text-4xl font-bold'>No one answered</h3>}
+                            {!selectedTeamId && !isAcceptingAnswers && <h3 className='text-4xl font-bold'>Time ran out</h3>}
                         </div>
 
                         <div className="flex justify-end mt-4 space-x-2">
