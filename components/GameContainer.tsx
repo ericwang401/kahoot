@@ -258,7 +258,10 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
         <div className='flex justify-center relative'>
             <div className='grid relative place-items-center h-full w-full'>
                 <div className='w-full relative'>
-                    <Leaderboard onClick={() => setShowLeaderboard(false)} show={showLeaderboard} completed={completed} />
+                    <Leaderboard onClick={() => {
+                        setShowLeaderboard(false)
+                        play('https://www.myinstants.com/media/sounds/family-feud-good-answer.mp3')
+                    }} show={showLeaderboard} completed={completed} />
                     {!showLeaderboard && <>
 
 
