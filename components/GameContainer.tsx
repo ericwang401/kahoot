@@ -260,7 +260,7 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
                 <div className='w-full relative'>
                     <Leaderboard onClick={() => {
                         setShowLeaderboard(false)
-                        play('https://www.myinstants.com/media/sounds/family-feud-good-answer.mp3')
+                        play('https://www.myinstants.com/media/sounds/26f8b9_sonic_ring_sound_effect.mp3')
                     }} show={showLeaderboard} completed={completed} />
                     {!showLeaderboard && <>
 
