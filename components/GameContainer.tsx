@@ -260,6 +260,7 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
                 <div className='w-full relative'>
                     <Leaderboard onClick={() => {
                         setShowLeaderboard(false)
+                        axios.post('/api/actions/question/emitNewQuestionEvent')
                         play('https://www.myinstants.com/media/sounds/26f8b9_sonic_ring_sound_effect.mp3')
                     }} show={showLeaderboard} completed={completed} />
                     {!showLeaderboard && <>
