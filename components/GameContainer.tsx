@@ -202,6 +202,10 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
 
     useEffect(() => {
         setIsAcceptingAnswers(true)
+        axios.post('/api/actions/answer/emitCorrectAnswer', {
+            question: questions[selectedQuestion].content,
+            answer: questions[selectedQuestion].correctAnswer
+         })
 
         timeoutRef.current = setTimeout(() => {
             setIsAcceptingAnswers(false)
