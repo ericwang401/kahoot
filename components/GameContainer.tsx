@@ -205,7 +205,7 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
         axios.post('/api/actions/answer/emitCorrectAnswer', {
             question: questions[selectedQuestion].content,
             answer: questions[selectedQuestion].correctAnswer
-         })
+        })
 
         timeoutRef.current = setTimeout(() => {
             setIsAcceptingAnswers(false)
@@ -323,19 +323,19 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
                                 </>}
                             <div className="grow"></div>
 
-                            <button
+                           {/*  <button
                                 type="button"
                                 className="w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:w-auto sm:text-sm"
                                 onClick={() => setShowAnswer(val => !val)}
                             >
                                 Toggle Answer
-                            </button>
+                            </button> */}
                             <button
                                 type="button"
                                 className="w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm"
                                 onClick={skip}
                             >
-                                Skip
+                                Continue
                             </button>
                         </div>
 
@@ -350,7 +350,7 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
             </div>
             <div>
 
-                {showAnswer && <div className='ml-5 mt-5 min-w-[30rem] absolute shadow sm:rounded-md sm:overflow-hidden bg-white px-4 py-5 sm:p-6'>
+                {!selectedTeamId && !isAcceptingAnswers && <div className='ml-5 mt-5 min-w-[30rem] absolute shadow sm:rounded-md sm:overflow-hidden bg-white px-4 py-5 sm:p-6'>
                     <h3 className='text-4xl font-bold'>Correct Answer</h3>
                     <p className='text-2xl'>{questions[selectedQuestion].correctAnswer ? questions[selectedQuestion].correctAnswer : 'No correct answers'}</p>
                 </div>}

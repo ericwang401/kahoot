@@ -7,6 +7,12 @@ const play = async (path: string) => {
     primary.src = ''
     primary.remove()
   })
+
+  document.addEventListener('muteAll', () => {
+    primary.pause()
+    primary.src = ''
+    primary.remove()
+  })
 }
 
 export default play

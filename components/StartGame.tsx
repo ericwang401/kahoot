@@ -1,6 +1,7 @@
 import Input from '@components/Input';
 import axios from 'axios';
-import { ChangeEventHandler, ChangeEvent } from 'react';
+import { ChangeEventHandler, ChangeEvent, useEffect, useState } from 'react';
+import play from '@util/playSound'
 
 interface StartGameProps {
     questions: {
@@ -19,6 +20,7 @@ interface StartGameProps {
 
 
 const StartGame = ({ questions, teams, onClick, onChange, timeoutValue }: StartGameProps) => {
+    const [audioPlayed, setAudioPlayed] = useState(false)
     const stats = [
         { name: 'Questions', stat: questions.length },
         { name: 'Teams', stat: teams.length },
@@ -37,10 +39,24 @@ const StartGame = ({ questions, teams, onClick, onChange, timeoutValue }: StartG
             onChange(0)
             return
         }
-        onChange(parseInt(event.target.value.replace(/\D/g,'')))
+        onChange(parseInt(event.target.value.replace(/\D/g, '')))
     }
 
-    return <div className='grid place-items-center h-full'>
+    const onCallback = () => {
+        let muteEvent = new Event('muteAll', { bubbles: true })
+
+        document.dispatchEvent(muteEvent)
+        onClick()
+    }
+
+    const playAudio = () => {
+        if (audioPlayed) return;
+
+        play('/assets/sounds/lobby.mp3')
+        setAudioPlayed(true)
+    }
+
+    return <div className='grid place-items-center h-full' onClick={playAudio}>
         <div>
             <img className='mx-auto' src="https://imgur.com/bw1McHh.png" alt="logo" />
 
@@ -62,7 +78,7 @@ const StartGame = ({ questions, teams, onClick, onChange, timeoutValue }: StartG
                     <button
                         type="button"
                         className="w-full justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:w-auto sm:text-sm"
-                        onClick={onClick}
+                        onClick={onCallback}
                     >
                         Start
                     </button>
