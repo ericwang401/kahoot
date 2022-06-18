@@ -71,7 +71,7 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
     const speechSynthesisUtterance = useMemo(async () => {
         const speech = new SpeechSynthesisUtterance()
         const voices = await getVoices()
-        console.log({voices})
+        console.log({ voices })
         speech.voice = voices.find(voice => voice.lang === 'en-GB') as SpeechSynthesisVoice
         speech.rate = 0.7
         return speech
@@ -136,9 +136,9 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
     const markAsCorrect = async () => {
         await axios.post(`/api/actions/team/add/${selectedTeamId}`)
 
-       /*  const speech = await speechSynthesisUtterance
-        speech.text = `good job ${selectedTeam?.name}`
-        window.speechSynthesis.speak(speech) */
+        /*  const speech = await speechSynthesisUtterance
+         speech.text = `good job ${selectedTeam?.name}`
+         window.speechSynthesis.speak(speech) */
         // get random element from correctSoundEffects
         const soundEffect = correctSoundEffects[Math.floor(Math.random() * correctSoundEffects.length)]
         play(soundEffect)
@@ -316,14 +316,14 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
                                     <button
                                         type="button"
                                         className="w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:w-auto sm:text-sm"
-                                        onClick={markAsCorrect}
+                                        onClick={() => setShowAnswer(true)}
                                     >
-                                        Mark as correct
+                                        Show Answer
                                     </button>
                                 </>}
                             <div className="grow"></div>
 
-                           {/*  <button
+                            {/*  <button
                                 type="button"
                                 className="w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:w-auto sm:text-sm"
                                 onClick={() => setShowAnswer(val => !val)}
@@ -350,9 +350,19 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
             </div>
             <div>
 
-                {!selectedTeamId && !completed && !isAcceptingAnswers && <div className='ml-5 mt-5 min-w-[30rem] absolute shadow sm:rounded-md sm:overflow-hidden bg-white px-4 py-5 sm:p-6'>
+                {(!selectedTeamId && !completed && !isAcceptingAnswers || showAnswer) && <div className='ml-5 mt-5 min-w-[30rem] absolute shadow sm:rounded-md sm:overflow-hidden bg-white px-4 py-5 sm:p-6'>
                     <h3 className='text-4xl font-bold'>Correct Answer</h3>
                     <p className='text-2xl'>{questions[selectedQuestion].correctAnswer ? questions[selectedQuestion].correctAnswer : 'No correct answers'}</p>
+
+                    {
+                        selectedTeamId && <button
+                            type="button"
+                            className="w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:w-auto sm:text-sm"
+                            onClick={markAsCorrect}
+                        >
+                            Award Points
+                        </button>
+                    }
                 </div>}
             </div>
         </div></>
