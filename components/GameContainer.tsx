@@ -142,8 +142,9 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
         // get random element from correctSoundEffects
         const soundEffect = correctSoundEffects[Math.floor(Math.random() * correctSoundEffects.length)]
         play(soundEffect)
+        setShowAnswer(true)
 
-        setTeamsThatAnswered([])
+        /* setTeamsThatAnswered([])
         setShowLeaderboard(true)
         setSelectedTeamId(null)
         setTeamsThatBuzzed([])
@@ -153,7 +154,7 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
             setSelectedQuestion(question => question + 1)
         } else {
             setCompleted(true)
-        }
+        } */
     }
 
     const skip = () => {
@@ -316,9 +317,9 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
                                     <button
                                         type="button"
                                         className="w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:w-auto sm:text-sm"
-                                        onClick={() => setShowAnswer(true)}
+                                        onClick={markAsCorrect}
                                     >
-                                        Show Answer
+                                        Mark Correct
                                     </button>
                                 </>}
                             <div className="grow"></div>
@@ -354,15 +355,7 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
                     <h3 className='text-4xl font-bold'>Correct Answer</h3>
                     <p className='text-2xl'>{questions[selectedQuestion].correctAnswer ? questions[selectedQuestion].correctAnswer : 'No correct answers'}</p>
 
-                    {
-                        selectedTeamId && <button
-                            type="button"
-                            className="w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:w-auto sm:text-sm"
-                            onClick={markAsCorrect}
-                        >
-                            Award Points
-                        </button>
-                    }
+
                 </div>}
             </div>
         </div></>
