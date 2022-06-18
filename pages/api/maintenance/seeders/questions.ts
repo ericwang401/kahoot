@@ -7,7 +7,13 @@ import seed from '@commands/seedQuestions'
 export default withAuthorized(
   async (req: NextApiRequest, res: NextApiResponse) => {
 
-    await seed()
+    if (req.body.link) {
+      const data = await (await fetch(req.body.link)).text()
+
+      await seed(data)
+    } else {
+      await seed()
+    }
 
     res.status(200).json({
         message: 'migrated questions'

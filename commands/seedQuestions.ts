@@ -53,9 +53,9 @@ const questions = `1. TF: Tigers live in the jungle? A:True%|B:False
 49. How long does a wild giraffe sleep each day? A:30 min%|B: 2 hours |C:6 hours|D:12 hours
 50. What is the theme of this year's competition? Jungle Adventure%`
 
-const seed = async () => {
+const seed = async (contents?: string) => {
   const data = parseQuestions(
-    questions
+    contents || questions
   ) as Prisma.Enumerable<Prisma.QuestionsCreateManyInput>
 
   await prisma.questions.deleteMany({})
