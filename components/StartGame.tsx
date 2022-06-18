@@ -43,9 +43,12 @@ const StartGame = ({ questions, teams, onClick, onChange, timeoutValue }: StartG
     }
 
     const onCallback = () => {
-        let muteEvent = new Event('muteAll', { bubbles: true })
+        setTimeout(() => {
 
-        document.dispatchEvent(muteEvent)
+            let muteEvent = new Event('muteAll', { bubbles: true })
+
+            document.dispatchEvent(muteEvent)
+        }, 100)
         onClick()
     }
 

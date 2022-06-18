@@ -29,7 +29,9 @@ const Play: NextPage<PlayProps> = ({ questions, teams }) => {
 
     return <div className="max-w-7xl h-full mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl h-full mx-auto">
-            {!playing && <StartGame timeoutValue={answerTimeout} onChange={setAnswerTimeout} onClick={() => setPlaying(true)} questions={shuffledQuestions} teams={teams} />}
+            {!playing && <StartGame timeoutValue={answerTimeout} onChange={setAnswerTimeout} onClick={() => {
+                setPlaying(true)
+            }} questions={shuffledQuestions} teams={teams} />}
 
             {playing && <GameContainer timeoutValue={answerTimeout} questions={shuffledQuestions} teams={teams} />}
         </div>
