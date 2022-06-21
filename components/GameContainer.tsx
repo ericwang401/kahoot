@@ -49,7 +49,7 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
         selectedQuestionRef.current = selectedQuestion
         teamsThatBuzzedRef.current = teamsThatBuzzed
         selectedTeamIdRef.current = selectedTeamId
-    }, [showLeaderboard, selectedQuestion])
+    }, [showLeaderboard, selectedQuestion, teamsThatBuzzed, selectedTeamId])
 
     const getVoices = (): Promise<SpeechSynthesisVoice[]> => {
         return new Promise(
@@ -207,7 +207,8 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
     }
 
     const denyPoints = async () => {
-        const deniedTeam = teamsThatBuzzedRef.current.find(teamId => teamId == selectedTeamId) as number
+        console.log(teamsThatBuzzedRef.current, 'teamsthatbuzzed')
+        const deniedTeam = teamsThatBuzzedRef.current.find(teamId => teamId == selectedTeamIdRef.current) as number
         await axios.post(`/api/actions/team/subtract/${deniedTeam}`)
 
         setTeamsThatAnswered(oldTeamsThatAnswered => {
@@ -224,10 +225,16 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
         play(soundEffect)
 
         // find team that buzzed by team id and get index
-        const teamIndex = teamsThatBuzzed.findIndex(teamId => teamId == selectedTeamId)
-        const nextTeam = teamsThatBuzzed[teamIndex + 1]
+        const teamIndex = teamsThatBuzzedRef.current.findIndex(teamId => teamId == selectedTeamId)
+        const nextTeam = teamsThatBuzzedRef.current[teamIndex + 1]
+        //console.log({nextTeam})
 
-        teamsThatBuzzed.shift()
+        setTeamsThatBuzzed(oldTeamsThatBuzzed => {
+            let newArray = [...oldTeamsThatBuzzed]
+            newArray.shift()
+            return newArray
+        }
+        )
         if (nextTeam) {
             setSelectedTeamId(nextTeam)
             return
