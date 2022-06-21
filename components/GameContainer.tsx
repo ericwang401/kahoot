@@ -212,20 +212,17 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
         await axios.post(`/api/actions/team/subtract/${deniedTeam}`)
 
         setTeamsThatAnswered(oldTeamsThatAnswered => {
-            if (oldTeamsThatAnswered.includes(oldTeamsThatAnswered[0])) return oldTeamsThatAnswered;
+            //console.log({oldTeamsThatAnswered})
+            if (oldTeamsThatAnswered.includes(deniedTeam)) return oldTeamsThatAnswered;
 
             return [...oldTeamsThatAnswered, deniedTeam]
         })
 
-        /* const speech = await speechSynthesisUtterance
-        speech.text = `jaja tu pierdes ${selectedTeam?.name}`
-        window.speechSynthesis.speak(speech) */
-        // get random element from incorrectSoundEffects
         const soundEffect = incorrectSoundEffects[Math.floor(Math.random() * incorrectSoundEffects.length)]
         play(soundEffect)
 
         // find team that buzzed by team id and get index
-        const teamIndex = teamsThatBuzzedRef.current.findIndex(teamId => teamId == selectedTeamId)
+        const teamIndex = teamsThatBuzzedRef.current.findIndex(teamId => teamId == selectedTeamIdRef.current)
         const nextTeam = teamsThatBuzzedRef.current[teamIndex + 1]
         //console.log({nextTeam})
 
@@ -235,6 +232,7 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
             return newArray
         }
         )
+
         if (nextTeam) {
             setSelectedTeamId(nextTeam)
             return
