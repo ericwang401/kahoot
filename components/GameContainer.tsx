@@ -25,10 +25,12 @@ let socket
 
 const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) => {
     const [showLeaderboard, setShowLeaderboard] = useState(false)
+    const showLeaderboardRef = useRef(showLeaderboard)
     const [showAnswer, setShowAnswer] = useState(false)
 
     const [connected, setConnected] = useState(false)
     const [selectedQuestion, setSelectedQuestion] = useState<number>(0)
+    const selectedQuestionRef = useRef(selectedQuestion)
     const [selectedTeamId, setSelectedTeamId] = useState<number | null>(null)
     const [teamsThatBuzzed, setTeamsThatBuzzed] = useState<number[]>([])
     const [teamsThatAnswered, setTeamsThatAnswered] = useState<number[]>([])
@@ -39,6 +41,11 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
     const [completed, setCompleted] = useState(false)
     const selectedTeam = useMemo(() => teams.find(team => team.id == selectedTeamId), [selectedTeamId, teams])
     const controls = useAnimation()
+
+    useEffect(() => {
+        showLeaderboardRef.current = showLeaderboard
+        selectedQuestionRef.current = selectedQuestion
+    }, [showLeaderboard, selectedQuestion])
 
     const getVoices = (): Promise<SpeechSynthesisVoice[]> => {
         return new Promise(
@@ -89,6 +96,23 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
             setConnected(false)
         })
 
+        socket.on('mark-incorrect-event', () => {
+            denyPoints()
+        })
+
+        socket.on('mark-correct-event', () => {
+            markAsCorrect()
+        })
+
+        socket.on('next-question-event', () => {
+            console.log('triggered next question', showLeaderboardRef.current)
+            if (showLeaderboardRef.current) {
+                nextQuestion()
+            } else {
+                skip()
+            }
+        })
+
         socket.on('select-team', (id: number) => {
             setShowLeaderboard(oldCompleted => {
                 if (oldCompleted) return oldCompleted;
@@ -133,6 +157,12 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
         })
     }
 
+    const nextQuestion = () => {
+        setShowLeaderboard(false)
+        axios.post('/api/actions/question/emitNewQuestionEvent')
+        play('https://www.myinstants.com/media/sounds/26f8b9_sonic_ring_sound_effect.mp3')
+    }
+
     const markAsCorrect = async () => {
         await axios.post(`/api/actions/team/add/${selectedTeamId}`)
 
@@ -163,8 +193,8 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
         setSelectedTeamId(null)
         setShowAnswer(false)
         setTeamsThatBuzzed([])
-
-        if (selectedQuestion + 1 < questions.length) {
+        console.log(selectedQuestionRef.current, 'selectedQuestion')
+        if (selectedQuestionRef.current + 1 < questions.length) {
             setSelectedQuestion(question => question + 1)
         } else {
             setShowLeaderboard(true)
@@ -203,6 +233,7 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
 
     useEffect(() => {
         setIsAcceptingAnswers(true)
+        console.log(questions, selectedQuestion)
         axios.post('/api/actions/answer/emitCorrectAnswer', {
             question: questions[selectedQuestion].content,
             answer: questions[selectedQuestion].correctAnswer
@@ -263,11 +294,7 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
         <div className='flex justify-center relative'>
             <div className='grid relative place-items-center h-full w-full'>
                 <div className='w-full relative'>
-                    <Leaderboard onClick={() => {
-                        setShowLeaderboard(false)
-                        axios.post('/api/actions/question/emitNewQuestionEvent')
-                        play('https://www.myinstants.com/media/sounds/26f8b9_sonic_ring_sound_effect.mp3')
-                    }} show={showLeaderboard} completed={completed} />
+                    <Leaderboard onClick={nextQuestion} show={showLeaderboard} completed={completed} />
                     {!showLeaderboard && <>
 
 
