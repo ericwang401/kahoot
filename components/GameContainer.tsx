@@ -32,7 +32,9 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
     const [selectedQuestion, setSelectedQuestion] = useState<number>(0)
     const selectedQuestionRef = useRef(selectedQuestion)
     const [selectedTeamId, setSelectedTeamId] = useState<number | null>(null)
+    const selectedTeamIdRef = useRef(selectedTeamId)
     const [teamsThatBuzzed, setTeamsThatBuzzed] = useState<number[]>([])
+    const teamsThatBuzzedRef = useRef(teamsThatBuzzed)
     const [teamsThatAnswered, setTeamsThatAnswered] = useState<number[]>([])
 
     const [isAcceptingAnswers, setIsAcceptingAnswers] = useState(true)
@@ -45,6 +47,8 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
     useEffect(() => {
         showLeaderboardRef.current = showLeaderboard
         selectedQuestionRef.current = selectedQuestion
+        teamsThatBuzzedRef.current = teamsThatBuzzed
+        selectedTeamIdRef.current = selectedTeamId
     }, [showLeaderboard, selectedQuestion])
 
     const getVoices = (): Promise<SpeechSynthesisVoice[]> => {
@@ -164,7 +168,7 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
     }
 
     const markAsCorrect = async () => {
-        await axios.post(`/api/actions/team/add/${selectedTeamId}`)
+        await axios.post(`/api/actions/team/add/${selectedTeamIdRef.current}`)
 
         /*  const speech = await speechSynthesisUtterance
          speech.text = `good job ${selectedTeam?.name}`
@@ -203,7 +207,7 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
     }
 
     const denyPoints = async () => {
-        const deniedTeam = teamsThatBuzzed.find(teamId => teamId == selectedTeamId) as number
+        const deniedTeam = teamsThatBuzzedRef.current.find(teamId => teamId == selectedTeamId) as number
         await axios.post(`/api/actions/team/subtract/${deniedTeam}`)
 
         setTeamsThatAnswered(oldTeamsThatAnswered => {
