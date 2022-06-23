@@ -209,7 +209,9 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
     const denyPoints = async () => {
         console.log(teamsThatBuzzedRef.current, 'teamsthatbuzzed')
         const deniedTeam = teamsThatBuzzedRef.current.find(teamId => teamId == selectedTeamIdRef.current) as number
-        await axios.post(`/api/actions/team/subtract/${deniedTeam}`)
+        await axios.post(`/api/actions/team/subtract/${deniedTeam}`,  {
+            modifier: 2
+        })
 
         setTeamsThatAnswered(oldTeamsThatAnswered => {
             //console.log({oldTeamsThatAnswered})
@@ -241,6 +243,8 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
     }
 
     useEffect(() => {
+        if (showLeaderboard) return;
+
         setIsAcceptingAnswers(true)
         console.log(questions, selectedQuestion)
         axios.post('/api/actions/answer/emitCorrectAnswer', {
