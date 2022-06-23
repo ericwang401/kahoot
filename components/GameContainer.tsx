@@ -238,6 +238,8 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
         if (nextTeam) {
             setSelectedTeamId(nextTeam)
             return
+        } else {
+            setShowAnswer(true)
         }
         setSelectedTeamId(null)
     }
