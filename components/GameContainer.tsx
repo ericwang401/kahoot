@@ -392,7 +392,7 @@ const GameContainer = ({ questions, teams, timeoutValue }: GameContainerProps) =
             </div>
             <div>
 
-                {(!selectedTeamId && !completed && showAnswer) && <div className='ml-5 mt-5 min-w-[30rem] absolute shadow sm:rounded-md sm:overflow-hidden bg-white px-4 py-5 sm:p-6'>
+                {(!completed && showAnswer) && <div className='ml-5 mt-5 min-w-[30rem] absolute shadow sm:rounded-md sm:overflow-hidden bg-white px-4 py-5 sm:p-6'>
                     <h3 className='text-4xl font-bold'>Correct Answer</h3>
                     <p className='text-2xl'>{questions[selectedQuestion].correctAnswer ? questions[selectedQuestion].correctAnswer : 'No correct answers'}</p>
 
