@@ -32,6 +32,8 @@ const UpdateTeam = ({ id, name}: Props) => {
                 setOpen(false)
                 refresh()
             })
+
+        axios.post('/api/actions/team/emitGroupChangeEvent')  
     }
 
     return <>
